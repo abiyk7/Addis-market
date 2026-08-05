@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #EFEADC;
+  color: #241A12;
+  font-family: 'Noto Sans Ethiopic', 'Karla', sans-serif;
+}
+a { color: inherit; text-decoration: none; }
+input, select, textarea, button { font-family: inherit; }
+.tibeb-divider {
+  height: 8px;
+  background-image: repeating-linear-gradient(135deg, #C6952F 0px, #C6952F 12px, #9A3E2B 12px, #9A3E2B 24px, #2E5339 24px, #2E5339 36px);
+}
