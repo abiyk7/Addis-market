@@ -128,6 +128,9 @@ export default async function Home({ searchParams }) {
         <p className="mt-3 max-w-xl mx-auto leading-relaxed" style={{ opacity: 0.75 }}>
           አዲስ ገበያ በሻጮች እና በገዢዎች መካከል ለሚደረግ ማንኛውም ልውውጥ፣ ስምምነት፣ ወይም ግብይት ኃላፊነት አይወስድም። ተጠቃሚዎች የራሳቸውን ጥንቃቄ እንዲወስዱ እና ከመክፈላቸው በፊት እቃውን በአካል እንዲያረጋግጡ እንመክራለን።
         </p>
+        <p className="mt-3">
+          <a href="/privacy" className="font-semibold underline" style={{ color: COLORS.goldDark }}>የግላዊነት ፖሊሲ · Privacy Policy</a>
+        </p>
       </footer>
     </div>
   );
