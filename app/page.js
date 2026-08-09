@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { decideListingStatus } from "@/lib/moderation";
@@ -15,7 +15,7 @@ const inputStyle = {
   width: "100%",
 };
 
-export default function PostPage() {
+function PostForm() {
   const supabase = createClient();
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
@@ -95,14 +95,12 @@ export default function PostPage() {
       currency: form.currency,
       location: form.location,
       contact: form.contact,
-      contact_email: session.user.email || null,
       show_phone: form.show_phone,
       photo_urls: urls,
     };
 
     let error;
     if (editId) {
-      // editing: keep existing status, don't re-run moderation
       ({ error } = await supabase.from("listings").update(payload).eq("id", editId));
     } else {
       const { status } = await decideListingStatus(supabase, session.user.id, form);
@@ -201,5 +199,13 @@ export default function PostPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PostPage() {
+  return (
+    <Suspense fallback={null}>
+      <PostForm />
+    </Suspense>
   );
 }
