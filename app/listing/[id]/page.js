@@ -74,6 +74,9 @@ export default async function ListingPage({ params }) {
             <p>• ከመክፈልዎ በፊት እቃውን በአካል ይመልከቱ</p>
             <p>• በህዝብ ቦታ ይገናኙ</p>
             <p>• ገንዘብ ቅድሚያ ከማይታወቁ ሻጮች አይላኩ</p>
+            <p className="mt-2 pt-2" style={{ borderTop: `1px solid ${COLORS.parchmentDark}`, opacity: 0.85 }}>
+              አዲስ ገበያ በዚህ ግብይት ለሚነሳ ማንኛውም ውዝግብ ወይም ጉዳት ኃላፊነት አይወስድም።
+            </p>
           </div>
 
           {isOwner ? (
