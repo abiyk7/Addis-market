@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Plus, LogOut, User } from "lucide-react";
+import { Plus, LogOut, User, MessageCircle } from "lucide-react";
 import { COLORS } from "@/lib/theme";
 
 export default function AuthStatus() {
   const supabase = createClient();
-  const [session, setSession] = useState(undefined);
+  const [session, setSession] = useState(undefined); // undefined = loading
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -30,6 +30,14 @@ export default function AuthStatus() {
 
   return (
     <div className="flex items-center gap-2 shrink-0">
+      <a
+        href="/messages"
+        className="p-2 rounded-full"
+        style={{ background: COLORS.parchmentDark, color: COLORS.coffeeDark }}
+        title="Messages"
+      >
+        <MessageCircle size={16} />
+      </a>
       <a
         href="/post"
         className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold"
