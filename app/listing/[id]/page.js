@@ -1,15 +1,19 @@
 import { createClient } from "@/lib/supabase/server";
 import ReportButton from "@/components/ReportButton";
+import OwnerControls from "@/components/OwnerControls";
+import ContactSeller from "@/components/ContactSeller";
 import { COLORS, catById } from "@/lib/theme";
-import { MapPin, ShieldCheck, Phone, Send } from "lucide-react";
+import { MapPin, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function ListingPage({ params }) {
   const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+
   const { data: listing } = await supabase
     .from("listings")
-    .select("*, profiles(is_verified_seller)")
+    .select("*, profiles(is_verified_seller, email, display_name)")
     .eq("id", params.id)
     .single();
 
@@ -18,8 +22,9 @@ export default async function ListingPage({ params }) {
   }
 
   const cat = catById(listing.category_id);
-  const isPhone = /^\+?[0-9\s-]{6,}$/.test(listing.contact);
   const photo = listing.photo_urls?.[0];
+  const isOwner = session?.user?.id === listing.user_id;
+  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(listing.location)}&output=embed`;
 
   return (
     <div className="min-h-screen py-8 px-4" style={{ background: COLORS.parchment }}>
@@ -36,6 +41,11 @@ export default async function ListingPage({ params }) {
               <ShieldCheck size={13} /> የተረጋገጠ ሻጭ
             </span>
           )}
+          {listing.status === "cancelled" && (
+            <span className="absolute top-3 right-3 text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: COLORS.rust, color: COLORS.parchment }}>
+              ተሰርዟል · Cancelled
+            </span>
+          )}
         </div>
         <div className="p-5">
           <span className="text-xs font-semibold" style={{ color: COLORS.goldDark }}>{cat.amh}</span>
@@ -48,6 +58,17 @@ export default async function ListingPage({ params }) {
           </div>
           <p className="mt-3 text-sm leading-relaxed">{listing.description}</p>
 
+          <div className="mt-4 rounded-xl overflow-hidden" style={{ border: `1px solid ${COLORS.parchmentDark}` }}>
+            <iframe
+              title="map"
+              width="100%"
+              height="180"
+              style={{ border: 0, display: "block" }}
+              loading="lazy"
+              src={mapSrc}
+            />
+          </div>
+
           <div className="mt-4 p-3 rounded-xl text-xs leading-relaxed" style={{ background: COLORS.parchment, border: `1px solid ${COLORS.parchmentDark}` }}>
             <p className="font-bold mb-1 flex items-center gap-1" style={{ color: COLORS.forest }}><ShieldCheck size={14} /> የደህንነት ምክሮች</p>
             <p>• ከመክፈልዎ በፊት እቃውን በአካል ይመልከቱ</p>
@@ -55,14 +76,11 @@ export default async function ListingPage({ params }) {
             <p>• ገንዘብ ቅድሚያ ከማይታወቁ ሻጮች አይላኩ</p>
           </div>
 
-          <a
-            href={isPhone ? `tel:${listing.contact}` : `https://t.me/${listing.contact.replace("@", "")}`}
-            target="_blank" rel="noreferrer"
-            className="mt-4 flex items-center justify-center gap-2 py-2.5 rounded-full font-semibold text-sm"
-            style={{ background: COLORS.gold, color: COLORS.coffeeDark }}
-          >
-            {isPhone ? <Phone size={16} /> : <Send size={16} />} ሻጭን ያግኙ
-          </a>
+          {isOwner ? (
+            <OwnerControls listingId={listing.id} status={listing.status} />
+          ) : (
+            <ContactSeller listing={listing} sellerEmail={listing.profiles?.email} />
+          )}
 
           <ReportButton listingId={listing.id} />
         </div>
