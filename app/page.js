@@ -122,9 +122,12 @@ export default async function Home({ searchParams }) {
       </main>
 
       <div className="tibeb-divider" style={{ height: 6 }} />
-      <footer className="text-center py-6 text-xs" style={{ background: "#FFFDF7", color: COLORS.inkSoft, borderTop: `1px solid ${COLORS.parchmentDark}` }}>
+      <footer className="text-center py-6 text-xs px-4" style={{ background: "#FFFDF7", color: COLORS.inkSoft, borderTop: `1px solid ${COLORS.parchmentDark}` }}>
         <p className="font-semibold" style={{ fontFamily: "'Fraunces', serif", color: COLORS.coffeeDark }}>አዲስ ገበያ · Addis Market</p>
         <p className="opacity-70 mt-1">በኢትዮጵያውያን ለኢትዮጵያውያን የተሰራ · © 2026</p>
+        <p className="mt-3 max-w-xl mx-auto leading-relaxed" style={{ opacity: 0.75 }}>
+          አዲስ ገበያ በሻጮች እና በገዢዎች መካከል ለሚደረግ ማንኛውም ልውውጥ፣ ስምምነት፣ ወይም ግብይት ኃላፊነት አይወስድም። ተጠቃሚዎች የራሳቸውን ጥንቃቄ እንዲወስዱ እና ከመክፈላቸው በፊት እቃውን በአካል እንዲያረጋግጡ እንመክራለን።
+        </p>
       </footer>
     </div>
   );
