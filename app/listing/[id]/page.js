@@ -1,92 +1,137 @@
-import { createClient } from "@/lib/supabase/server";
-import ReportButton from "@/components/ReportButton";
-import OwnerControls from "@/components/OwnerControls";
-import ContactSeller from "@/components/ContactSeller";
-import { COLORS, catById } from "@/lib/theme";
-import { MapPin, ShieldCheck } from "lucide-react";
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { COLORS } from "@/lib/theme";
+import { getDict, DEFAULT_LANGUAGE } from "@/lib/i18n";
+import { Send } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+function readLangCookie() {
+  if (typeof document === "undefined") return DEFAULT_LANGUAGE;
+  const match = document.cookie.match(/(?:^|; )lang=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : DEFAULT_LANGUAGE;
+}
 
-export default async function ListingPage({ params }) {
+export default function ThreadPage({ params }) {
+  const { listingId, otherId } = params;
   const supabase = createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const [lang, setLang] = useState(DEFAULT_LANGUAGE);
+  const [session, setSession] = useState(undefined);
+  const [listing, setListing] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef(null);
 
-  const { data: listing } = await supabase
-    .from("listings")
-    .select("*, profiles(is_verified_seller, email, display_name)")
-    .eq("id", params.id)
-    .single();
+  useEffect(() => {
+    setLang(readLangCookie());
+  }, []);
 
-  if (!listing) {
-    return <div className="min-h-screen flex items-center justify-center" style={{ background: COLORS.parchment }}>ማስታወቂያው አልተገኘም።</div>;
-  }
+  const t = getDict(lang);
 
-  const cat = catById(listing.category_id);
-  const photo = listing.photo_urls?.[0];
-  const isOwner = session?.user?.id === listing.user_id;
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(listing.location)}&output=embed`;
+  useEffect(() => {
+    supabase.auth.getSession().then(async ({ data }) => {
+      setSession(data.session);
+      if (!data.session) return (window.location.href = "/login");
+
+      const { data: l } = await supabase.from("listings").select("id, title").eq("id", listingId).single();
+      setListing(l);
+
+      await loadMessages(data.session.user.id);
+    });
+
+    const channel = supabase
+      .channel(`messages-${listingId}-${otherId}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
+        const m = payload.new;
+        if (m.listing_id === listingId && (m.sender_id === otherId || m.receiver_id === otherId)) {
+          setMessages((prev) => [...prev, m]);
+        }
+      })
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, [listingId, otherId]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const loadMessages = async (myId) => {
+    const { data } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("listing_id", listingId)
+      .or(`and(sender_id.eq.${myId},receiver_id.eq.${otherId}),and(sender_id.eq.${otherId},receiver_id.eq.${myId})`)
+      .order("created_at", { ascending: true });
+    setMessages(data || []);
+  };
+
+  const send = async () => {
+    if (!text.trim() || !session) return;
+    setSending(true);
+    const { error } = await supabase.from("messages").insert({
+      listing_id: listingId,
+      sender_id: session.user.id,
+      receiver_id: otherId,
+      body: text.trim(),
+    });
+    setSending(false);
+    if (!error) {
+      setText("");
+      loadMessages(session.user.id);
+    }
+  };
+
+  if (session === undefined) return null;
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ background: COLORS.parchment }}>
-      <div className="max-w-lg mx-auto rounded-2xl overflow-hidden" style={{ background: COLORS.card, border: `1px solid ${COLORS.parchmentDark}` }}>
-        <div className="h-44 relative flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${COLORS.coffee}dd, ${COLORS.coffeeDark})` }}>
-          {photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={photo} alt={listing.title} className="w-full h-full object-cover" />
-          ) : (
-            <span style={{ fontSize: 56 }}>{cat.emoji}</span>
-          )}
-          {listing.profiles?.is_verified_seller && (
-            <span className="absolute bottom-3 left-3 flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: COLORS.forest, color: COLORS.parchment }}>
-              <ShieldCheck size={13} /> የተረጋገጠ ሻጭ
-            </span>
-          )}
-          {listing.status === "cancelled" && (
-            <span className="absolute top-3 right-3 text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: COLORS.rust, color: COLORS.parchment }}>
-              ተሰርዟል · Cancelled
-            </span>
-          )}
-        </div>
-        <div className="p-5">
-          <span className="text-xs font-semibold" style={{ color: COLORS.goldDark }}>{cat.amh}</span>
-          <h1 className="text-xl font-bold mt-1">{listing.title}</h1>
-          <div className="text-2xl font-bold mt-2" style={{ fontFamily: "'IBM Plex Mono', monospace", color: COLORS.rust }}>
-            {listing.price} {listing.currency}
-          </div>
-          <div className="flex items-center gap-1 text-sm mt-2" style={{ color: COLORS.inkSoft }}>
-            <MapPin size={14} /> {listing.location}
-          </div>
-          <p className="mt-3 text-sm leading-relaxed">{listing.description}</p>
+    <div className="min-h-screen flex flex-col" style={{ background: COLORS.parchment }}>
+      <div className="px-4 py-3 sticky top-0" style={{ background: COLORS.coffee, color: COLORS.parchment }}>
+        <a href={`/listing/${listingId}`} className="text-xs opacity-80">{t.backToListing}</a>
+        <p className="font-bold text-sm mt-0.5">{listing?.title || t.conversationFallback}</p>
+      </div>
 
-          <div className="mt-4 rounded-xl overflow-hidden" style={{ border: `1px solid ${COLORS.parchmentDark}` }}>
-            <iframe
-              title="map"
-              width="100%"
-              height="180"
-              style={{ border: 0, display: "block" }}
-              loading="lazy"
-              src={mapSrc}
-            />
-          </div>
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2 max-w-lg w-full mx-auto">
+        {messages.length === 0 && (
+          <p className="text-center text-sm mt-8" style={{ color: COLORS.inkSoft }}>{t.noMessagesYet}</p>
+        )}
+        {messages.map((m) => {
+          const mine = m.sender_id === session.user.id;
+          return (
+            <div
+              key={m.id}
+              className="max-w-[75%] px-3 py-2 rounded-2xl text-sm"
+              style={{
+                alignSelf: mine ? "flex-end" : "flex-start",
+                background: mine ? COLORS.gold : COLORS.card,
+                color: mine ? COLORS.coffeeDark : COLORS.ink,
+                border: mine ? "none" : `1px solid ${COLORS.parchmentDark}`,
+              }}
+            >
+              {m.body}
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
+      </div>
 
-          <div className="mt-4 p-3 rounded-xl text-xs leading-relaxed" style={{ background: COLORS.parchment, border: `1px solid ${COLORS.parchmentDark}` }}>
-            <p className="font-bold mb-1 flex items-center gap-1" style={{ color: COLORS.forest }}><ShieldCheck size={14} /> የደህንነት ምክሮች</p>
-            <p>• ከመክፈልዎ በፊት እቃውን በአካል ይመልከቱ</p>
-            <p>• በህዝብ ቦታ ይገናኙ</p>
-            <p>• ገንዘብ ቅድሚያ ከማይታወቁ ሻጮች አይላኩ</p>
-            <p className="mt-2 pt-2" style={{ borderTop: `1px solid ${COLORS.parchmentDark}`, opacity: 0.85 }}>
-              አዲስ ገበያ በዚህ ግብይት ለሚነሳ ማንኛውም ውዝግብ ወይም ጉዳት ኃላፊነት አይወስድም።
-            </p>
-          </div>
-
-          {isOwner ? (
-            <OwnerControls listingId={listing.id} status={listing.status} />
-          ) : (
-            <ContactSeller listing={listing} sellerEmail={listing.profiles?.email} />
-          )}
-
-          <ReportButton listingId={listing.id} />
-        </div>
+      <div className="p-3 flex gap-2 max-w-lg w-full mx-auto sticky bottom-0" style={{ background: COLORS.parchment, borderTop: `1px solid ${COLORS.parchmentDark}` }}>
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          placeholder={t.messagePlaceholder}
+          className="flex-1 px-3 py-2.5 rounded-full text-sm"
+          style={{ border: `1px solid ${COLORS.parchmentDark}`, background: COLORS.card }}
+        />
+        <button
+          onClick={send}
+          disabled={sending || !text.trim()}
+          className="p-2.5 rounded-full disabled:opacity-40"
+          style={{ background: COLORS.forest, color: COLORS.parchment }}
+        >
+          <Send size={18} />
+        </button>
       </div>
     </div>
   );
