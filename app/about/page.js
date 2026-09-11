@@ -1,3 +1,4 @@
+import { COLORS } from "@/lib/theme";
 import { ShieldCheck } from "lucide-react";
 
 export const metadata = {
