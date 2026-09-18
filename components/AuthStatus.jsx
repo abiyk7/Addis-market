@@ -35,13 +35,13 @@ export default function AuthStatus() {
         </button>
       </div>
 
-      {/* Big floating button — always visible, follows you down the page, no way to miss it */}
+      {/* Full-width bar, stuck to the very bottom of the screen, always visible */}
       <a
         href="/post"
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-4 rounded-full font-bold text-sm shadow-lg"
-        style={{ background: COLORS.gold, color: COLORS.coffeeDark, boxShadow: "0 6px 20px rgba(0,0,0,0.35)" }}
+        className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-center gap-2 py-4 font-bold text-sm"
+        style={{ background: COLORS.gold, color: COLORS.coffeeDark, boxShadow: "0 -4px 16px rgba(0,0,0,0.25)" }}
       >
-        <Plus size={20} /> ማስታወቂያ ይለጥፉ
+        <Plus size={20} /> ማስታወቂያ ይለጥፉ · Post an ad
       </a>
     </>
   );
