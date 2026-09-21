@@ -55,7 +55,16 @@ export default async function Home({ searchParams }) {
         <p className="mt-2 text-sm sm:text-base max-w-xl mx-auto" style={{ color: COLORS.inkSoft }}>
           ለኢትዮጵያ እና ለውጪ አገር ኢትዮጵያውያን የተዘጋጀ ነፃ የግዢና ሽያጭ መድረክ
         </p>
-        <div className="flex justify-center gap-3 mt-4 flex-wrap text-xs font-semibold">
+
+        <a
+          href="/post"
+          className="inline-flex items-center gap-2 mt-6 px-8 py-4 rounded-full font-bold text-base"
+          style={{ background: COLORS.gold, color: COLORS.coffeeDark, boxShadow: "0 6px 18px rgba(0,0,0,0.25)" }}
+        >
+          <span style={{ fontSize: 22, lineHeight: 1 }}>+</span> ማስታወቂያ ይለጥፉ · Post an ad
+        </a>
+
+        <div className="flex justify-center gap-3 mt-5 flex-wrap text-xs font-semibold">
           <span className="flex items-center gap-1 px-3 py-1.5 rounded-full" style={{ background: COLORS.forest, color: COLORS.parchment }}>
             <ShieldCheck size={14} /> ደህንነቱ የተጠበቀ
           </span>
