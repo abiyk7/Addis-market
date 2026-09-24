@@ -51,8 +51,8 @@ export default async function ListingPage({ params }) {
         <div className="p-5">
           <span className="text-xs font-semibold" style={{ color: COLORS.goldDark }}>{cat.amh}</span>
           <h1 className="text-xl font-bold mt-1">{listing.title}</h1>
-          <div className="text-2xl font-bold mt-2" style={{ fontFamily: "'IBM Plex Mono', monospace", color: COLORS.rust }}>
-            {listing.price} {listing.currency}
+          <div className="text-2xl font-bold mt-2" style={{ fontFamily: "'IBM Plex Mono', monospace", color: listing.currency === "በነፃ" ? COLORS.forest : COLORS.rust }}>
+            {listing.currency === "በነፃ" ? "🎁 በነፃ · Free" : `${listing.price} ${listing.currency}`}
           </div>
           <div className="flex items-center gap-1 text-sm mt-2" style={{ color: COLORS.inkSoft }}>
             <MapPin size={14} /> {listing.location}
