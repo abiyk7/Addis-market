@@ -24,11 +24,11 @@ export default async function Home({ searchParams }) {
 
   return (
     <div style={{ minHeight: "100vh" }}>
-      <header style={{ background: COLORS.coffee, color: COLORS.parchment }} className="sticky top-0 z-30 shadow-md">
+      <header style={{ background: "#FFFFFF", color: COLORS.coffeeDark }} className="sticky top-0 z-30 shadow-md">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
           <a href="/" className="flex items-baseline gap-2 shrink-0">
-            <span className="text-2xl font-bold" style={{ color: COLORS.gold }}>አዲስ ገበያ</span>
-            <span className="text-xs uppercase tracking-widest opacity-80" style={{ fontFamily: "'Fraunces', serif" }}>Addis Market</span>
+            <span className="text-2xl font-bold" style={{ color: COLORS.coffee }}>አዲስ ገበያ</span>
+            <span className="text-xs uppercase tracking-widest" style={{ fontFamily: "'Fraunces', serif", color: COLORS.inkSoft }}>Addis Market</span>
           </a>
 
           <form action="/" method="get" className="flex-1 min-w-[180px] relative">
