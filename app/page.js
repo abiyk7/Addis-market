@@ -56,27 +56,35 @@ export default async function Home({ searchParams }) {
       </header>
       <div className="tibeb-divider" />
 
-      <section className="max-w-6xl mx-auto px-4 pt-8 pb-6 text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold leading-snug" style={{ color: COLORS.coffeeDark }}>
-          የኢትዮጵያውያን የግዢና ሽያጭ ገበያ
-        </h1>
-        <p className="mt-2 text-sm sm:text-base max-w-xl mx-auto" style={{ color: COLORS.inkSoft }}>
-          ለኢትዮጵያ እና ለውጪ አገር ኢትዮጵያውያን የተዘጋጀ ነፃ የግዢና ሽያጭ መድረክ
-        </p>
+      <section className="relative overflow-hidden" style={{ minHeight: 420 }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/women-street-sellers.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.8) 65%, #FFFFFF 100%)" }} />
+        </div>
 
-        <a
-          href="/post"
-          className="inline-flex items-center gap-2 mt-6 px-8 py-4 rounded-full font-bold text-base"
-          style={{ background: COLORS.gold, color: COLORS.coffeeDark, boxShadow: "0 6px 18px rgba(0,0,0,0.25)" }}
-        >
-          <span style={{ fontSize: 22, lineHeight: 1 }}>+</span> ማስታወቂያ ይለጥፉ · Post an ad
-        </a>
+        <div className="relative max-w-6xl mx-auto px-4 pt-8 pb-6 text-center" style={{ zIndex: 1 }}>
+          <h1 className="text-3xl sm:text-4xl font-bold leading-snug" style={{ color: COLORS.coffeeDark }}>
+            የኢትዮጵያውያን የግዢና ሽያጭ ገበያ
+          </h1>
+          <p className="mt-2 text-sm sm:text-base max-w-xl mx-auto" style={{ color: COLORS.inkSoft }}>
+            ለኢትዮጵያ እና ለውጪ አገር ኢትዮጵያውያን የተዘጋጀ ነፃ የግዢና ሽያጭ መድረክ
+          </p>
 
-        <div className="flex justify-center gap-3 mt-5 flex-wrap text-xs font-semibold">
-          <span className="flex items-center gap-1 px-3 py-1.5 rounded-full" style={{ background: COLORS.forest, color: COLORS.parchment }}>
-            <ShieldCheck size={14} /> ደህንነቱ የተጠበቀ
-          </span>
-          <span className="px-3 py-1.5 rounded-full" style={{ background: COLORS.rust, color: COLORS.parchment }}>100% ነፃ</span>
+          <a
+            href="/post"
+            className="inline-flex items-center gap-2 mt-6 px-8 py-4 rounded-full font-bold text-base"
+            style={{ background: COLORS.gold, color: COLORS.coffeeDark, boxShadow: "0 6px 18px rgba(0,0,0,0.25)" }}
+          >
+            <span style={{ fontSize: 22, lineHeight: 1 }}>+</span> ማስታወቂያ ይለጥፉ · Post an ad
+          </a>
+
+          <div className="flex justify-center gap-3 mt-5 flex-wrap text-xs font-semibold">
+            <span className="flex items-center gap-1 px-3 py-1.5 rounded-full" style={{ background: COLORS.forest, color: COLORS.parchment }}>
+              <ShieldCheck size={14} /> ደህንነቱ የተጠበቀ
+            </span>
+            <span className="px-3 py-1.5 rounded-full" style={{ background: COLORS.rust, color: COLORS.parchment }}>100% ነፃ</span>
+          </div>
         </div>
       </section>
 
