@@ -32,6 +32,12 @@ export default async function Home({ searchParams }) {
             <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 70%, #FFFFFF 100%)" }} />
           </div>
 
+          <div className="absolute inset-y-0 right-0 w-56 sm:w-80 pointer-events-none" style={{ zIndex: 0 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/Screenshot_20260925_215257_Google.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 70%, #FFFFFF 100%)" }} />
+          </div>
+
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 flex-wrap relative" style={{ zIndex: 1 }}>
             <a href="/" className="flex items-baseline gap-2 shrink-0">
               <span className="text-2xl font-bold" style={{ color: COLORS.coffee }}>አዲስ ገበያ</span>
