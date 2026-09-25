@@ -26,16 +26,10 @@ export default async function Home({ searchParams }) {
     <div style={{ minHeight: "100vh" }}>
       <header style={{ background: "#FFFFFF", color: COLORS.coffeeDark }} className="sticky top-0 z-30 shadow-md">
         <div className="relative overflow-hidden">
-          <div className="absolute inset-y-0 left-0 w-56 sm:w-80 pointer-events-none" style={{ zIndex: 0 }}>
+          <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-56 sm:w-80 pointer-events-none" style={{ zIndex: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/21203d04-8d7b-4002-89c4-9e6f8440d80b_medium.webp" alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 70%, #FFFFFF 100%)" }} />
-          </div>
-
-          <div className="absolute inset-y-0 right-0 w-56 sm:w-80 pointer-events-none" style={{ zIndex: 0 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/Screenshot_20260925_215257_Google.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 70%, #FFFFFF 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, #FFFFFF 100%)" }} />
           </div>
 
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 flex-wrap relative" style={{ zIndex: 1 }}>
