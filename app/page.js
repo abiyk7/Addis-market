@@ -25,25 +25,33 @@ export default async function Home({ searchParams }) {
   return (
     <div style={{ minHeight: "100vh" }}>
       <header style={{ background: "#FFFFFF", color: COLORS.coffeeDark }} className="sticky top-0 z-30 shadow-md">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
-          <a href="/" className="flex items-baseline gap-2 shrink-0">
-            <span className="text-2xl font-bold" style={{ color: COLORS.coffee }}>አዲስ ገበያ</span>
-            <span className="text-xs uppercase tracking-widest" style={{ fontFamily: "'Fraunces', serif", color: COLORS.inkSoft }}>Addis Market</span>
-          </a>
+        <div className="relative overflow-hidden">
+          <div className="absolute inset-y-0 left-0 w-44 sm:w-64 pointer-events-none" style={{ zIndex: 0 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/21203d04-8d7b-4002-89c4-9e6f8440d80b_medium.webp" alt="" className="w-full h-full object-cover" style={{ opacity: 0.3 }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 55%, #FFFFFF 100%)" }} />
+          </div>
 
-          <form action="/" method="get" className="flex-1 min-w-[180px] relative">
-            {cat !== "all" && <input type="hidden" name="cat" value={cat} />}
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-60" style={{ color: COLORS.coffeeDark }} />
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="ምን ይፈልጋሉ? · Search"
-              className="w-full pl-9 pr-3 py-2 rounded-full text-sm outline-none border-2 border-transparent focus:border-current"
-              style={{ background: COLORS.parchment, color: COLORS.ink }}
-            />
-          </form>
+          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 flex-wrap relative" style={{ zIndex: 1 }}>
+            <a href="/" className="flex items-baseline gap-2 shrink-0">
+              <span className="text-2xl font-bold" style={{ color: COLORS.coffee }}>አዲስ ገበያ</span>
+              <span className="text-xs uppercase tracking-widest" style={{ fontFamily: "'Fraunces', serif", color: COLORS.inkSoft }}>Addis Market</span>
+            </a>
 
-          <AuthStatus />
+            <form action="/" method="get" className="flex-1 min-w-[180px] relative">
+              {cat !== "all" && <input type="hidden" name="cat" value={cat} />}
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-60" style={{ color: COLORS.coffeeDark }} />
+              <input
+                name="q"
+                defaultValue={q}
+                placeholder="ምን ይፈልጋሉ? · Search"
+                className="w-full pl-9 pr-3 py-2 rounded-full text-sm outline-none border-2 border-transparent focus:border-current"
+                style={{ background: COLORS.parchment, color: COLORS.ink }}
+              />
+            </form>
+
+            <AuthStatus />
+          </div>
         </div>
       </header>
       <div className="tibeb-divider" />
