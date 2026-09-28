@@ -19,13 +19,16 @@ export default function LoginPage() {
     try {
       const { error } =
         mode === "email"
-          ? await supabase.auth.signInWithOtp({ email: value.trim() })
+          ? await supabase.auth.signInWithOtp({
+              email: value.trim(),
+              options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+            })
           : await supabase.auth.signInWithOtp({ phone: value.trim() });
       if (error) {
         setMsg(error.message);
       } else {
         setOtpSent(true);
-        setMsg(mode === "email" ? "ኮድ ወደ ኢሜይልዎ ተልኳል" : "ኮድ በSMS ተልኳል");
+        setMsg(mode === "email" ? "ሊንክ ወደ ኢሜይልዎ ተልኳል፤ ኢሜይሉን ከፍተው ሊንኩን ይጫኑ" : "ኮድ በSMS ተልኳል");
       }
     } catch (e) {
       setMsg("ችግር ተፈጥሯል፣ እባክዎ ኢንተርኔትዎን ያረጋግጡ እና እንደገና ይሞክሩ። (" + (e?.message || "network error") + ")");
@@ -81,17 +84,25 @@ export default function LoginPage() {
           </>
         ) : (
           <>
-            <input
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              inputMode="numeric"
-              placeholder="6-digit code"
-              className="w-full px-3 py-2.5 rounded-lg text-sm mb-3 tracking-widest text-center"
-              style={{ border: `1px solid ${COLORS.parchmentDark}`, background: "#FBF8EF" }}
-            />
-            <button onClick={verifyCode} disabled={loading || !code.trim()} className="w-full py-2.5 rounded-full font-semibold text-sm disabled:opacity-50" style={{ background: COLORS.gold, color: COLORS.coffeeDark }}>
-              {loading ? "በማረጋገጥ ላይ..." : "አረጋግጥ · Verify"}
-            </button>
+            {mode === "email" ? (
+              <p className="text-xs text-center mb-3" style={{ color: COLORS.inkSoft }}>
+                ኢሜይልዎን ይክፈቱ እና ውስጡ ያለውን ሊንክ ይጫኑ። ከዚያ ወደ ጣቢያው በራስ ሰር ይገባሉ።
+              </p>
+            ) : (
+              <>
+                <input
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  inputMode="numeric"
+                  placeholder="6-digit code"
+                  className="w-full px-3 py-2.5 rounded-lg text-sm mb-3 tracking-widest text-center"
+                  style={{ border: `1px solid ${COLORS.parchmentDark}`, background: "#FBF8EF" }}
+                />
+                <button onClick={verifyCode} disabled={loading || !code.trim()} className="w-full py-2.5 rounded-full font-semibold text-sm disabled:opacity-50" style={{ background: COLORS.gold, color: COLORS.coffeeDark }}>
+                  {loading ? "በማረጋገጥ ላይ..." : "አረጋግጥ · Verify"}
+                </button>
+              </>
+            )}
             <button onClick={() => { setOtpSent(false); setCode(""); setMsg(""); }} className="w-full py-2 text-xs mt-2" style={{ color: COLORS.inkSoft }}>
               ← ተመለስ · Back
             </button>
