@@ -6,7 +6,7 @@ import { deleteListing, toggleVerifiedSeller, toggleListingStatus } from "./acti
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -56,6 +56,9 @@ export default async function AdminPage() {
     <div className="min-h-screen px-4 py-8" style={{ background: COLORS.parchment }}>
       <div className="max-w-5xl mx-auto">
         <h1 className="text-2xl font-bold mb-6" style={{ color: COLORS.coffeeDark }}>የአስተዳዳሪ ገጽ · Admin</h1>
+        {searchParams?.error && (
+          <p className="text-sm mb-4 p-3 rounded-lg" style={{ background: "#fde2e2", color: "#900" }}>{searchParams.error}</p>
+        )}
 
         <h2 className="text-lg font-bold mb-3">ማስታወቂያዎች · Listings ({listings?.length || 0})</h2>
         <div className="space-y-2 mb-10">
