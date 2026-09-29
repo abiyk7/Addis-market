@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 async function assertAdmin() {
   const supabase = createClient();
@@ -22,9 +23,10 @@ export async function deleteListing(formData) {
   await assertAdmin();
   const id = formData.get("id");
   const admin = createAdminClient();
-  await admin.from("listings").delete().eq("id", id);
+  const { error } = await admin.from("listings").delete().eq("id", id);
   revalidatePath("/admin");
   revalidatePath("/");
+  if (error) redirect(`/admin?error=${encodeURIComponent(error.message)}`);
 }
 
 export async function toggleListingStatus(formData) {
@@ -33,9 +35,10 @@ export async function toggleListingStatus(formData) {
   const current = formData.get("current");
   const next = current === "active" ? "inactive" : "active";
   const admin = createAdminClient();
-  await admin.from("listings").update({ status: next }).eq("id", id);
+  const { error } = await admin.from("listings").update({ status: next }).eq("id", id);
   revalidatePath("/admin");
   revalidatePath("/");
+  if (error) redirect(`/admin?error=${encodeURIComponent(error.message)}`);
 }
 
 export async function toggleVerifiedSeller(formData) {
@@ -43,6 +46,7 @@ export async function toggleVerifiedSeller(formData) {
   const id = formData.get("id");
   const current = formData.get("current") === "true";
   const admin = createAdminClient();
-  await admin.from("profiles").update({ is_verified_seller: !current }).eq("id", id);
+  const { error } = await admin.from("profiles").update({ is_verified_seller: !current }).eq("id", id);
   revalidatePath("/admin");
+  if (error) redirect(`/admin?error=${encodeURIComponent(error.message)}`);
 }
