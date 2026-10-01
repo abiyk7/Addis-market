@@ -59,7 +59,7 @@ export default async function Home({ searchParams }) {
       <section className="relative overflow-hidden" style={{ minHeight: 420 }}>
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/women-street-sellers.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
+          <img src="/Frukt.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.8) 65%, #FFFFFF 100%)" }} />
         </div>
 
