@@ -67,8 +67,14 @@ export default async function Home({ searchParams }) {
           <h1 className="text-3xl sm:text-4xl font-bold leading-snug" style={{ color: COLORS.coffeeDark }}>
             የኢትዮጵያውያን የግዢና ሽያጭ ገበያ
           </h1>
-          <p className="mt-2 text-sm sm:text-base max-w-xl mx-auto" style={{ color: COLORS.inkSoft }}>
+          <p className="mt-1 text-lg sm:text-xl font-semibold" style={{ color: COLORS.coffee }}>
+            The Ethiopian Marketplace for Buying &amp; Selling
+          </p>
+          <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto" style={{ color: COLORS.inkSoft }}>
             ለኢትዮጵያ እና ለውጪ አገር ኢትዮጵያውያን የተዘጋጀ ነፃ የግዢና ሽያጭ መድረክ
+          </p>
+          <p className="mt-1 text-sm sm:text-base max-w-xl mx-auto" style={{ color: COLORS.inkSoft }}>
+            A free marketplace for Ethiopians at home and abroad
           </p>
 
           <a
@@ -81,9 +87,9 @@ export default async function Home({ searchParams }) {
 
           <div className="flex justify-center gap-3 mt-5 flex-wrap text-xs font-semibold">
             <span className="flex items-center gap-1 px-3 py-1.5 rounded-full" style={{ background: COLORS.forest, color: COLORS.parchment }}>
-              <ShieldCheck size={14} /> ደህንነቱ የተጠበቀ
+              <ShieldCheck size={14} /> ደህንነቱ የተጠበቀ · Safe &amp; Secure
             </span>
-            <span className="px-3 py-1.5 rounded-full" style={{ background: COLORS.rust, color: COLORS.parchment }}>100% ነፃ</span>
+            <span className="px-3 py-1.5 rounded-full" style={{ background: COLORS.rust, color: COLORS.parchment }}>100% ነፃ · 100% Free</span>
           </div>
         </div>
       </section>
@@ -95,7 +101,7 @@ export default async function Home({ searchParams }) {
             className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl text-xs font-semibold"
             style={{ background: cat === "all" ? COLORS.coffee : COLORS.card, color: cat === "all" ? COLORS.parchment : COLORS.ink, border: `1px solid ${COLORS.parchmentDark}` }}
           >
-            <span className="text-lg">🛒</span> ሁሉም
+            <span className="text-lg">🛒</span> ሁሉም · All
           </a>
           {CATEGORIES.map((c) => (
             <a
@@ -111,15 +117,19 @@ export default async function Home({ searchParams }) {
       </section>
 
       <main className="max-w-6xl mx-auto px-4 pb-16">
-        <h2 className="text-lg font-bold mb-3" style={{ color: COLORS.coffeeDark }}>የቅርብ ጊዜ ማስታወቂያዎች</h2>
+        <h2 className="text-lg font-bold mb-3" style={{ color: COLORS.coffeeDark }}>የቅርብ ጊዜ ማስታወቂያዎች · Latest ads</h2>
 
-        {error && <p className="text-sm" style={{ color: COLORS.rust }}>ዝርዝሮችን መጫን አልተቻለም። እባክዎ Supabase ማዋቀርዎን ያረጋግጡ።</p>}
+        {error && (
+          <p className="text-sm" style={{ color: COLORS.rust }}>
+            ዝርዝሮችን መጫን አልተቻለም። እባክዎ Supabase ማዋቀርዎን ያረጋግጡ። · Could not load listings. Please check your Supabase setup.
+          </p>
+        )}
 
         {!error && (!listings || listings.length === 0) && (
           <div className="text-center py-16 rounded-2xl" style={{ background: COLORS.card, border: `1px dashed ${COLORS.parchmentDark}` }}>
-            <p className="font-semibold mb-2">ምንም ውጤት አልተገኘም</p>
+            <p className="font-semibold mb-2">ምንም ውጤት አልተገኘም · No results found</p>
             <a href="/post" className="px-4 py-2 rounded-full text-sm font-semibold inline-block" style={{ background: COLORS.gold, color: COLORS.coffeeDark }}>
-              የመጀመሪያ ማስታወቂያዎን ይለጥፉ
+              የመጀመሪያ ማስታወቂያዎን ይለጥፉ · Post your first ad
             </a>
           </div>
         )}
@@ -138,7 +148,7 @@ export default async function Home({ searchParams }) {
           <a href="/privacy" className="opacity-80 hover:opacity-100">ግላዊነት · Privacy</a>
           <a href="/terms" className="opacity-80 hover:opacity-100">ውል · Terms</a>
         </div>
-        <p className="opacity-70 mt-3">በኢትዮጵያውያን ለኢትዮጵያውያን የተሰራ · © 2026</p>
+        <p className="opacity-70 mt-3">በኢትዮጵያውያን ለኢትዮጵያውያን የተሰራ · Made by Ethiopians, for Ethiopians · © 2026</p>
       </footer>
     </div>
   );
